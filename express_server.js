@@ -34,6 +34,7 @@ app.get("/urls.json", (req, res) => {
 });
 
 app.get("/urls", (req, res) => {
+  console.log("User in URLs")
   const templateVars = { urls: urlDatabase };
   res.render("urls_index", templateVars);
 });
