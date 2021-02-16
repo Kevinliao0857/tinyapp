@@ -15,7 +15,6 @@ app.get("/", (req, res) => {
   res.send("Hello!");
 });
 
-
 app.get("/urls/new", (req, res) => {
   res.render("urls_new");
   console.log("User going to New")
@@ -25,13 +24,13 @@ app.get("/hello", (req, res) => {
   res.send("<html><body>Hello <b>World</b></body></html>\n");
 });
 
-app.get("/urls.json", (req, res) => {
-  res.json(urlDatabase);
-});
-
 app.get("/hello", (req, res) => {
   const templateVars = { greeting: 'Hello World!' };
   res.render("hello_world", templateVars);
+});
+
+app.get("/urls.json", (req, res) => {
+  res.json(urlDatabase);
 });
 
 app.get("/urls", (req, res) => {
@@ -46,12 +45,22 @@ app.get("/urls/:shortURL", (req, res) => {
 
 
 app.post("/urls", (req, res) => {
-  console.log(req.body);  // Log the POST request body to the console
-  res.send(`${generateRandomString()}`);         // Respond with 'Ok' (we will replace this)
+  console.log(req.body);  
+  const longURL = req.body.longURL
+  const shortURL = generateRandomString()
+  urlDatabase[shortURL] = longURL
+  res.redirect(`/urls/${shortURL}`);       
+});
+
+app.get("/u/:shortURL", (req, res) => {
+  // console.log(req.params.shortURL)
+  const longURL = urlDatabase[req.params.shortURL]
+  // console.log(longURL)
+  res.redirect(longURL);
 });
 
 const generateRandomString = function(length = 6) {
-return Math.random().toString(20).substr(2, length)
+return Math.random().toString(36).substr(2, length)
 }
 
 
