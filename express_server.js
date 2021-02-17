@@ -21,20 +21,22 @@ app.get("/", (req, res) => {
   res.redirect("/urls");
 });
 
-app.get("/urls/:shortURL", (req, res) => {
-  const templateVars = { shortURL: req.params.shortURL, longURL: urlDatabase[req.params.shortURL] };
-  res.render("urls_show", templateVars);
+app.get("/urls", (req, res) => {
+  console.log("User in URLs")
+  const templateVars = { username: req.cookies["username"], urls: urlDatabase};
+  res.render("urls_index", templateVars);
 });
 
-
 app.get("/urls/new", (req, res) => {
-  res.render("urls_new");
+  const templateVars = {username: req.cookies.username}
+  res.render("urls_new", templateVars);
   console.log("User going to New")
 });
 
 
 app.post("/urls", (req, res) => {
   // console.log(req.body);  
+
   const longURL = req.body.longURL
   const shortURL = generateRandomString()
   urlDatabase[shortURL] = longURL
@@ -42,10 +44,10 @@ app.post("/urls", (req, res) => {
 });
 
 
-app.get("/urls", (req, res) => {
-  console.log("User in URLs")
-  const templateVars = { urls: urlDatabase, username: req.cookies["username"]};
-  res.render("urls_index", templateVars);
+app.get("/urls/:shortURL", (req, res) => {
+  
+  const templateVars = { shortURL: req.params.shortURL, longURL: urlDatabase[req.params.shortURL], username: req.cookies.username};
+  res.render("urls_show", templateVars);
 });
 
 
@@ -56,9 +58,9 @@ app.post("/urls/:shortURL/delete", (req, res) => {
 });
 
 app.post("/urls/:shortURL", (req, res) => {
-  const redirURL = req.params.shortURL;
-  urlDatabase[redirURL] = req.body.longURL;
-  res.redirect(`/urls/${redirURL}`);
+  const shortURL = req.params.shortURL;
+  urlDatabase[shortURL] = req.body.longURL;
+  res.redirect(`/urls/${shortURL}`);
 });
 
 
@@ -75,6 +77,10 @@ app.post('/logout', (req, res) => {
 })
 
 
+app.get('/urls/:shortURL', (req, res) => {
+  const templateVars = { username: req.cookies.username, shortURL: req.params.shortURL, longURL: urlDatabase[req.params.shortURL] };
+  res.render('urls_show', templateVars);
+});
 
 
 app.get("/u/:shortURL", (req, res) => {
@@ -83,10 +89,6 @@ app.get("/u/:shortURL", (req, res) => {
 });
 
 
-app.get('/urls/:shortURL', (req, res) => {
-  const templateVars = { username: req.cookies.username, shortURL: req.params.shortURL, longURL: urlDatabase[req.params.shortURL] };
-  res.render('urls_show', templateVars);
-});
 
 
 app.listen(PORT, () => {
