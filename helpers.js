@@ -1,23 +1,20 @@
 const urlDatabase = {
-  "b2xVn2": "http://www.lighthouselabs.ca",
-  "9sm5xK": "http://www.google.com"
+  b2xVn2: { longURL: "http://www.lighthouselabs.ca", userID: "ak47lW" },
+  Ysm5xK: { longURL: "http://www.google.com", userID: "ak47lW" },
+  b6UTxQ: { longURL: "https://www.tsn.ca", userID: "aJ48lW" },
+  i3BoGr: { longURL: "https://www.google.ca", userID: "aJ48lW" }
 };
 
 const usersData = { 
-  "userRandomID": {
-    id: "userRandomID", 
+  "aJ48lW": {
+    id: "aJ48lW", 
     email: "user@example.com", 
-    password: "purple-monkey-dinosaur"
-  },
- "user2RandomID": {
-    id: "user2RandomID", 
-    email: "user2@example.com", 
-    password: "dishwasher-funk"
-  },
-  "guy": {
-    id: "guy",
-    email: "testing@example.com",
     password: "123"
+  },
+ "ak47lW": {
+    id: "ak47lW", 
+    email: "user2@example.com", 
+    password: "321"
   }
 }
 
@@ -44,6 +41,19 @@ const checkForPassword = (password) => {
   }
   return false
 };
+
+
+//for later use when login bug is fixed
+
+// const urlOwner = (obj, userID) => {
+//   let newObj = {};
+//   for (let i in obj) {
+//     if (obj[i].userID === userID) {
+//       newObj[i] = obj[i];
+//     }
+//   }
+//   return newObj;
+// };
 
   module.exports = {
     urlDatabase,

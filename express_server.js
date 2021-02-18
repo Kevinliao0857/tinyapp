@@ -19,9 +19,23 @@ app.get("/urls", (req, res) => {
   console.log("User in URLs")
   const userID = req.cookies.user_id
   const templateVars = {user: usersData[userID], urls: urlDatabase};
-  console.log(templateVars)
   res.render("urls_index", templateVars);
 });
+
+
+// redirection to login screen
+
+// app.get("/urls", (req, res) => {
+//   console.log("User in URLs")
+//   const userID = req.cookies.user_id
+//   const templateVars = {user: usersData[userID], urls: urlDatabase};
+//   if (usersData[userID] === undefined) {
+//     res.redirect("/login")
+//   } else {
+//   console.log(templateVars)
+//   res.render("urls_index", templateVars);
+//   }
+// });
 
 app.post("/urls", (req, res) => {
   // console.log(req.body);  
@@ -31,11 +45,18 @@ app.post("/urls", (req, res) => {
   res.redirect(`/urls/${shortURL}`);       
 });
 
+
+// redirecting users to login
+
 app.get("/urls/new", (req, res) => {
   const userID = req.cookies.user_id
   const templateVars = {user: usersData[userID]}
+  if (usersData[userID] === undefined) {
+    res.redirect("/login")
+  } else {
   res.render("urls_new", templateVars);
   console.log("User going to New")
+  }
 });
 
 app.get("/urls/:shortURL", (req, res) => {
@@ -70,28 +91,24 @@ app.get("/login", (req, res) => {
 });
 
 
-
 // BIG PROBLEM LOG IN NOT SHOWING USER
 
 app.post("/login", (req, res) => {
 const userID = req.cookies.user_id
-console.log(req.cookies.user_id)
 const email = req.body.email;
 const password = req.body.password
-const user = checkForEmail(email);
 
-if (user) {
-  if (checkForEmail(email) && checkForPassword(password)) {
+if (checkForEmail(email) && checkForPassword(password)) {
     res.cookie("user_id", userID);
     res.redirect("/urls");  
     } else if (checkForEmail(email)) {
       res.status(403).send("Wrong password");
-    }
-  } else {
+    } else {
     res.status(403).send("User doesn't exist");
   }
 });
 
+// BIG PROBLEM UPTOP
 
 app.post("/logout", (req, res) => {
   const userID = req.cookies.user_id
@@ -108,9 +125,6 @@ app.get("/register", (req, res) => {
   res.render("urls_registration", templateVars)
 });
   
-
-
-
 
 app.post("/register", (req, res) => {
   const email = req.body.email
