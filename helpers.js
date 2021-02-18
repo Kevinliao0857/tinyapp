@@ -13,17 +13,42 @@ const usersData = {
     id: "user2RandomID", 
     email: "user2@example.com", 
     password: "dishwasher-funk"
+  },
+  "guy": {
+    id: "guy",
+    email: "testing@example.com",
+    password: "123"
   }
 }
 
-const generateRandomString = function(length = 6) {
+
+const generateRandomString = (length = 6) => {
   return Math.random().toString(36).substr(2, length)
   }
 
+
+const checkForEmail = (email) => {
+  for (const userID in usersData) {
+    if (email === usersData[userID].email) {
+      return usersData[userID];
+    }
+  }
+  return false
+};
+
+const checkForPassword = (password) => {
+  for (const userID in usersData) {
+    if (password === usersData[userID].password) {
+      return usersData[userID];
+    }
+  }
+  return false
+};
 
   module.exports = {
     urlDatabase,
     usersData,
     generateRandomString,
-
+    checkForEmail,
+    checkForPassword
   }

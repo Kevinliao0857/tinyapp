@@ -3,8 +3,8 @@ const app = express();
 const PORT = 8080; // default port 8080
 const bodyParser = require("body-parser");
 const cookieParser = require('cookie-parser')
-const { urlDatabase, usersData, generateRandomString } = require ("./helpers");
-const { req } = require("express");
+const { urlDatabase, usersData, generateRandomString, checkForEmail, checkForPassword } = require ("./helpers");
+const { req, request, response } = require("express");
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.set("view engine", "ejs");
@@ -66,19 +66,37 @@ app.get("/u/:shortURL", (req, res) => {
 app.get("/login", (req, res) => {
   const userID = req.cookies.user_id
   const templateVars = {user: usersData[userID]}
-  res.redirect("/urls_login", templateVars);
+  res.render("urls_login", templateVars);
 });
+
+
+
+// BIG PROBLEM LOG IN NOT SHOWING USER
 
 app.post("/login", (req, res) => {
-  const userID = req.body;
-  console.log(userID)
-  res.cookie("user_id", userID);
-  res.redirect("/urls");
+const userID = req.cookies.user_id
+console.log(req.cookies.user_id)
+const email = req.body.email;
+const password = req.body.password
+const user = checkForEmail(email);
+
+if (user) {
+  if (checkForEmail(email) && checkForPassword(password)) {
+    res.cookie("user_id", userID);
+    res.redirect("/urls");  
+    } else if (checkForEmail(email)) {
+      res.status(403).send("Wrong password");
+    }
+  } else {
+    res.status(403).send("User doesn't exist");
+  }
 });
 
-app.post('/logout', (req, res) => {
-  res.clearCookie('user_id');
-  res.redirect('/urls');
+
+app.post("/logout", (req, res) => {
+  const userID = req.cookies.user_id
+  res.clearCookie("user_id", userID);
+  res.redirect("/urls");
 })
 
 
@@ -95,25 +113,22 @@ app.get("/register", (req, res) => {
 
 
 app.post("/register", (req, res) => {
-const userID = req.cookies.user_id
-const templateVars = {user: usersData[userID]}
-if (req.body.email === '' || req.body.password === '') {
-  res.status(400).send("Missing information in the required fields!");
-} 
-
-if (usersData[userID]) {
- res.status(400).send("Username already exists")
-} else {
-  const userID = generateRandomString();
+  const email = req.body.email
+  if (email === '' || req.body.password === '') {
+    res.status(400).send("Missing information in the required fields!");
+  } else if (checkForEmail(email)) {
+    res.status(400).send("Username already exists")
+  } else {
+    const userID = generateRandomString();
     usersData[userID] = {
       userID,
-      email: req.body.email,
+      email: email,
       password: req.body.password
     };
     console.log(userID)
     res.cookie("user_id", userID);
     res.redirect("/urls")
-}  
+  }  
 });
  
 
