@@ -5,7 +5,7 @@ const PORT = 8080; // default port 8080
 const bodyParser = require("body-parser");
 const cookieParser = require('cookie-parser');
 
-const { urlDatabase, usersData, generateRandomString, checkForEmail, checkForPassword } = require("./helpers");
+const { urlDatabase, usersData, generateRandomString, checkForEmail, checkForPassword, urlOwner } = require("./helpers");
 const { req, request, response } = require("express");
 
 app.use(bodyParser.urlencoded({extended: true}));
@@ -19,25 +19,20 @@ app.get("/", (req, res) => {
   res.redirect("/urls");
 });
 
-app.get("/urls", (req, res) => {
-  console.log("User in URLs");
-  const userID = req.cookies.user_id;
-  const templateVars = {user: usersData[userID], urls: urlDatabase};
-  res.render("urls_index", templateVars);
-});
-// redirection to login screen verion when login fixed
+// redirection to login screen verion
 
-// app.get("/urls", (req, res) => {
-//   console.log("User in URLs")
-//   const userID = req.cookies.user_id
-//   const templateVars = {user: usersData[userID], urls: urlDatabase};
-//   if (usersData[userID] === undefined) {
-//     res.redirect("/login")
-//   } else {
-//   console.log(templateVars)
-//   res.render("urls_index", templateVars);
-//   }
-// });
+app.get("/urls", (req, res) => {
+  console.log("User in URLs")
+  const userID = req.cookies.user_id
+  const userURLs = urlOwner(userID, urlDatabase)
+  const templateVars = {user: usersData[userID], urls: userURLs};
+  if (usersData[userID] === undefined) {
+    res.redirect("/login")
+  } else {
+  console.log(templateVars)
+  res.render("urls_index", templateVars);
+  }
+});
 
 
 // redirecting users to login
@@ -120,7 +115,7 @@ app.post("/login", (req, res) => {
 
   if (checkForEmail(email) && checkForPassword(password)) {
     const user = checkForEmail(email)
-    console.log(user);
+    // console.log(user);
     res.cookie("user_id", user.id);
     res.redirect("/urls");
   } else if (checkForEmail(email)) {

@@ -45,20 +45,22 @@ const checkForPassword = (password) => {
 
 //for later use when login bug is fixed
 
-// const urlOwner = (obj, userID) => {
-//   let newObj = {};
-//   for (let i in obj) {
-//     if (obj[i].userID === userID) {
-//       newObj[i] = obj[i];
-//     }
-//   }
-//   return newObj;
-// };
+const urlOwner = (obj, database) => {
+  let userUrls = {};
+  for (const shortURL in database) {
+    if (database[shortURL].userID === obj) {
+      userUrls[shortURL] = database[shortURL];
+    }
+  }
+  return userUrls;
+};
 
   module.exports = {
     urlDatabase,
     usersData,
     generateRandomString,
     checkForEmail,
-    checkForPassword
+    checkForPassword,
+    urlOwner
+
   }
