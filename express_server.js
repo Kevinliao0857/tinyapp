@@ -17,6 +17,7 @@ app.use(cookieSession({
   keys: ["hello", "goodbye"]
 }));
 
+// const sessionId = "";
 
 //*********Web pages ************/
 
@@ -43,15 +44,15 @@ app.get("/register", (req, res) => {
 });
 
 // redirection to login screen verion
-
+// missing long url's only [objects]
 app.get("/urls", (req, res) => {
   const userID = req.session.user_id
   const userURLs = urlOwner(userID, urlDatabase)
   const templateVars = {user: users[userID], urls: userURLs};
+  console.log("hello?",templateVars)
   if (users[userID] === undefined) {
     res.redirect("/login")
   } else {
-  console.log(templateVars)
   res.render("urls_index", templateVars);
   }
 });
@@ -65,13 +66,20 @@ app.get("/urls/new", (req, res) => {
     res.redirect("/login");
   } else {
     res.render("urls_new", templateVars);
-    console.log("User going to New");
   }
 });
 
+
+// editing short url missing long url
 app.get("/urls/:shortURL", (req, res) => {
   const userID = req.session.user_id;
+  const urlentry = urlDatabase[req.params.shortURL]
+  if (urlentry.userID !== userID) {
+  return res.send(403)
+  }
   const templateVars = { shortURL: req.params.shortURL, longURL: urlDatabase[req.params.shortURL].longURL, user: users[userID]};
+
+  console.log("long?", urlDatabase[req.params.shortURL].longURL)
   res.render("urls_show", templateVars);
 });
 
@@ -89,13 +97,18 @@ app.get("/u/:shortURL", (req, res) => {
 app.post("/urls", (req, res) => {
   const longURL = req.body.longURL;
   const shortURL = generateRandomString();
-  urlDatabase[shortURL] = longURL;
+  urlDatabase[shortURL] = {longURL: req.body.longURL, userID: req.session.user_id};
+  // console.log("database?", urlDatabase)
   res.redirect(`/urls/${shortURL}`);
 });
 
 app.post("/urls/:shortURL", (req, res) => {
   const shortURL = req.params.shortURL;
-  urlDatabase[shortURL] = req.body.longURL;
+  const urlentry = urlDatabase[req.params.shortURL]
+  if (urlentry.userID !== userID) {
+    return res.send(403)
+    }
+  urlDatabase[shortURL] = {longURL: req.body.longURL, userID: req.session.user_id};
   res.redirect(`/urls/${shortURL}`);
 });
 
@@ -122,7 +135,6 @@ app.post("/login", (req, res) => {
 
   if (checkForEmail(email) && bcrypt.compareSync(password, passwordCheck.password)) {
     const user = checkForEmail(email)
-    // console.log(user);
     req.session.user_id = user.id;
     res.redirect("/urls");
   } else if (checkForEmail(email)) {
@@ -137,7 +149,7 @@ app.post("/login", (req, res) => {
 // log out post
 app.post("/logout", (req, res) => {
   res.clearCookie("session");
-  res.redirect("/urls");
+  res.redirect("/login");
 });
 
   
@@ -151,12 +163,10 @@ app.post("/register", (req, res) => {
   } else {
     const userID = generateRandomString();
     users[userID] = {
-      userID,
+      id: userID,
       email: email,
       password: bcrypt.hashSync(req.body.password, 10)
     };
-    console.log(users.password)
-    console.log(userID);
     req.session.user_id = userID;
     res.redirect("/urls");
   }

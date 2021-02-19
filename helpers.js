@@ -14,8 +14,8 @@ const users = {
 }
 
 
-const generateRandomString = (length = 6) => {
-  return Math.random().toString(36).substr(2, length)
+const generateRandomString = (length = 8) => {
+  return Math.random().toString(36).substr(2, length).slice(1, -1)
   }
 
 
@@ -37,6 +37,7 @@ const urlOwner = (obj, database) => {
   let userUrls = {};
   for (const shortURL in database) {
     if (database[shortURL].userID === obj) {
+
       userUrls[shortURL] = database[shortURL];
     }
   }
