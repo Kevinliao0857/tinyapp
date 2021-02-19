@@ -17,7 +17,7 @@ app.use(cookieSession({
   keys: ["hello", "goodbye"]
 }));
 
-// const sessionId = "";
+
 
 //*********Web pages ************/
 
