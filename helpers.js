@@ -5,18 +5,18 @@ const urlDatabase = {
   i3BoGr: { longURL: "https://www.google.ca", userID: "aJ48lW" }
 };
 
-const users = { 
+const users = {
   "aJ48lW": {
-    id: "aJ48lW", 
-    email: "user@example.com", 
+    id: "aJ48lW",
+    email: "user@example.com",
     password: "$2b$10$M1rpN0K5Lf4ft1H1ufVCSOlkSDjHBgwtq39q6uQH4x0geOumAjW9e"
   },
-}
+};
 
 
 const generateRandomString = (length = 8) => {
-  return Math.random().toString(36).substr(2, length).slice(1, -1)
-  }
+  return Math.random().toString(36).substr(2, length).slice(1, -1);
+};
 
 
 const checkForEmail = (email) => {
@@ -25,7 +25,7 @@ const checkForEmail = (email) => {
       return users[userID];
     }
   }
-  return false
+  return false;
 };
 
 
@@ -39,11 +39,11 @@ const urlOwner = (obj, database) => {
   return userUrls;
 };
 
-  module.exports = {
-    urlDatabase,
-    users,
-    generateRandomString,
-    checkForEmail,
-    urlOwner
+module.exports = {
+  urlDatabase,
+  users,
+  generateRandomString,
+  checkForEmail,
+  urlOwner
 
-  }
+};
