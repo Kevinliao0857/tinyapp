@@ -19,7 +19,7 @@ const testUsers = {
     password: "123"
   }
 }
-describe('getUserByEmail', function() {
+describe('getUserByEmail', () => {
   it('should return a user with valid email', function() {
     const user = checkForEmail("user@example.com", testUsers)
     const expectedOutput = "aJ48lW";
@@ -56,7 +56,6 @@ describe('#urlOwner', () => {
         userID: 'Kevin'
       }
     };
-
     assert.deepEqual(userUrls, expectedResult);
   });
 
