@@ -1,21 +1,16 @@
 const urlDatabase = {
-  b2xVn2: { longURL: "http://www.lighthouselabs.ca", userID: "ak47lW" },
-  Ysm5xK: { longURL: "http://www.google.com", userID: "ak47lW" },
+  b2xVn2: { longURL: "http://www.lighthouselabs.ca", userID: "aJ48lW" },
+  Ysm5xK: { longURL: "http://www.google.com", userID: "aJ48lW" },
   b6UTxQ: { longURL: "https://www.tsn.ca", userID: "aJ48lW" },
   i3BoGr: { longURL: "https://www.google.ca", userID: "aJ48lW" }
 };
 
-const usersData = { 
+const users = { 
   "aJ48lW": {
     id: "aJ48lW", 
     email: "user@example.com", 
-    password: "123"
+    password: "$2b$10$M1rpN0K5Lf4ft1H1ufVCSOlkSDjHBgwtq39q6uQH4x0geOumAjW9e"
   },
- "ak47lW": {
-    id: "ak47lW", 
-    email: "user2@example.com", 
-    password: "321"
-  }
 }
 
 
@@ -25,22 +20,15 @@ const generateRandomString = (length = 6) => {
 
 
 const checkForEmail = (email) => {
-  for (const userID in usersData) {
-    if (email === usersData[userID].email) {
-      return usersData[userID];
+  for (const userID in users) {
+    if (email === users[userID].email) {
+      return users[userID];
     }
   }
   return false
 };
 
-const checkForPassword = (password) => {
-  for (const userID in usersData) {
-    if (password === usersData[userID].password) {
-      return usersData[userID];
-    }
-  }
-  return false
-};
+
 
 
 //for later use when login bug is fixed
@@ -57,10 +45,9 @@ const urlOwner = (obj, database) => {
 
   module.exports = {
     urlDatabase,
-    usersData,
+    users,
     generateRandomString,
     checkForEmail,
-    checkForPassword,
     urlOwner
 
   }
