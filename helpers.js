@@ -11,16 +11,6 @@ const users = {
     email: "user@example.com", 
     password: "$2b$10$M1rpN0K5Lf4ft1H1ufVCSOlkSDjHBgwtq39q6uQH4x0geOumAjW9e"
   },
-  "user3RandomID": {
-    id: "userRandomID", 
-    email: "user3@example.com", 
-    password: "purple-monkey-dinosaur"
-  },
-  "user2RandomID": {
-    id: "user2RandomID", 
-    email: "user2@example.com", 
-    password: "dishwasher-funk"
-  }
 }
 
 

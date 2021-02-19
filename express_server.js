@@ -51,7 +51,6 @@ app.get("/urls", (req, res) => {
   const userID = req.session.user_id;
   const userURLs = urlOwner(userID, urlDatabase);
   const templateVars = {user: users[userID], urls: userURLs};
-  console.log("hello?",templateVars);
   if (users[userID] === undefined) {
     res.redirect("/login");
   } else {
@@ -80,8 +79,6 @@ app.get("/urls/:shortURL", (req, res) => {
     return res.send(403);
   }
   const templateVars = { shortURL: req.params.shortURL, longURL: urlDatabase[req.params.shortURL].longURL, user: users[userID]};
-
-  console.log("long?", urlDatabase[req.params.shortURL].longURL);
   res.render("urls_show", templateVars);
 });
 

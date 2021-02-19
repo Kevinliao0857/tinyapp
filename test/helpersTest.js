@@ -8,22 +8,22 @@ const testUsers = {
     email: "user@example.com", 
     password: "$2b$10$M1rpN0K5Lf4ft1H1ufVCSOlkSDjHBgwtq39q6uQH4x0geOumAjW9e"
   },
-  "userRandomID": {
-    id: "user3RandomID", 
-    email: "user3@example.com", 
-    password: "purple-monkey-dinosaur"
+  "123456": {
+    id: "12345", 
+    email: "mouseexample.com", 
+    password: "321"
   },
-  "user2RandomID": {
-    id: "user2RandomID", 
-    email: "user2@example.com", 
-    password: "dishwasher-funk"
+  "789101": {
+    id: "78910", 
+    email: "test@example.com", 
+    password: "123"
   }
 }
 describe('getUserByEmail', function() {
   it('should return a user with valid email', function() {
     const user = checkForEmail("user@example.com", testUsers)
-    const expectedOutput = "userRandomID";
-    assert.equal(user, testUsers.userRandomID);
+    const expectedOutput = "aJ48lW";
+    assert.equal(testUsers.userRandomID);
   });
 });
 
@@ -35,7 +35,7 @@ const testUrls = {
   },
   'xywz': {
     longURL: 'http://www.ask.com',
-    userID: 'Evan'
+    userID: 'John'
   },
   'jfkd': {
     longURL: 'http://www.cbc.com',
